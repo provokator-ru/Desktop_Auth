@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище st2_Sokolov_telecomModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Autorization">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Number" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="IdentificationData">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Serialnumber" Type="varchar" MaxLength="50" />
+    <Property Name="Inventorynumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IPaddres" Type="varchar" MaxLength="20" />
+    <Property Name="MACaddres" Type="varchar" MaxLength="50" />
+    <Property Name="Phonenumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Nameequipment" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Infromationlocation">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Installationaddres" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Connectionpoint" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Installationlocation" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Installationdate" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="GatewayPhoneNumber" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Phonelist" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="InstalledEquipment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CodeTypeEquipment" Type="int" Nullable="false" />
+    <Property Name="CodeIdentificationData" Type="int" Nullable="false" />
+    <Property Name="CodeTypePort" Type="int" Nullable="false" />
+    <Property Name="CodeInformationlocation" Type="int" Nullable="false" />
+    <Property Name="NumberPorts" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Subscriber">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Firstname" Type="varchar" MaxLength="50" />
+    <Property Name="Lastname" Type="varchar" MaxLength="100" />
+    <Property Name="Patronymic" Type="varchar" MaxLength="50" />
+    <Property Name="Condition" Type="varchar" MaxLength="20" />
+    <Property Name="Personalnumber" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TypeEquipment">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TypePort">
+    <Key>
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IDSubscriber" Type="int" Nullable="false" />
+    <Property Name="Numberport" Type="nchar" MaxLength="10" />
+    <Property Name="Typeport" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="FK_InstalledEquipment_IdentificationData">
+    <End Role="IdentificationData" Type="Self.IdentificationData" Multiplicity="1" />
+    <End Role="InstalledEquipment" Type="Self.InstalledEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IdentificationData">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="InstalledEquipment">
+        <PropertyRef Name="CodeIdentificationData" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InstalledEquipment_Infromationlocation">
+    <End Role="Infromationlocation" Type="Self.Infromationlocation" Multiplicity="1" />
+    <End Role="InstalledEquipment" Type="Self.InstalledEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Infromationlocation">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="InstalledEquipment">
+        <PropertyRef Name="CodeInformationlocation" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InstalledEquipment_TypeEquipment">
+    <End Role="TypeEquipment" Type="Self.TypeEquipment" Multiplicity="1" />
+    <End Role="InstalledEquipment" Type="Self.InstalledEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeEquipment">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="InstalledEquipment">
+        <PropertyRef Name="CodeTypeEquipment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InstalledEquipment_TypePort">
+    <End Role="TypePort" Type="Self.TypePort" Multiplicity="1" />
+    <End Role="InstalledEquipment" Type="Self.InstalledEquipment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypePort">
+        <PropertyRef Name="Code" />
+      </Principal>
+      <Dependent Role="InstalledEquipment">
+        <PropertyRef Name="CodeTypePort" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TypePort_Subscriber">
+    <End Role="Subscriber" Type="Self.Subscriber" Multiplicity="1" />
+    <End Role="TypePort" Type="Self.TypePort" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Subscriber">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TypePort">
+        <PropertyRef Name="IDSubscriber" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище st2_Sokolov_telecomModelContainer">
+    <EntitySet Name="Autorization" EntityType="Self.Autorization" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IdentificationData" EntityType="Self.IdentificationData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Infromationlocation" EntityType="Self.Infromationlocation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InstalledEquipment" EntityType="Self.InstalledEquipment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Subscriber" EntityType="Self.Subscriber" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TypeEquipment" EntityType="Self.TypeEquipment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TypePort" EntityType="Self.TypePort" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_InstalledEquipment_IdentificationData" Association="Self.FK_InstalledEquipment_IdentificationData">
+      <End Role="IdentificationData" EntitySet="IdentificationData" />
+      <End Role="InstalledEquipment" EntitySet="InstalledEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstalledEquipment_Infromationlocation" Association="Self.FK_InstalledEquipment_Infromationlocation">
+      <End Role="Infromationlocation" EntitySet="Infromationlocation" />
+      <End Role="InstalledEquipment" EntitySet="InstalledEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstalledEquipment_TypeEquipment" Association="Self.FK_InstalledEquipment_TypeEquipment">
+      <End Role="TypeEquipment" EntitySet="TypeEquipment" />
+      <End Role="InstalledEquipment" EntitySet="InstalledEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InstalledEquipment_TypePort" Association="Self.FK_InstalledEquipment_TypePort">
+      <End Role="TypePort" EntitySet="TypePort" />
+      <End Role="InstalledEquipment" EntitySet="InstalledEquipment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TypePort_Subscriber" Association="Self.FK_TypePort_Subscriber">
+      <End Role="Subscriber" EntitySet="Subscriber" />
+      <End Role="TypePort" EntitySet="TypePort" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
